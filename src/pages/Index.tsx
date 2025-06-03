@@ -1,35 +1,65 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { RoleSelectionCard } from '@/components/RoleSelectionCard';
 import { FeatureSection } from '@/components/FeatureSection';
+import { AuthModal } from '@/components/auth/AuthModal';
+import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
   const [showRoleSelection, setShowRoleSelection] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<'signin' | 'signup'>('signin');
+  const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Redirect authenticated users to their respective dashboards
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'student') {
+        navigate('/student-dashboard');
+      } else if (user.role === 'alumni') {
+        navigate('/alumni-dashboard');
+      }
+    }
+  }, [user, navigate]);
+
   const handleGetStarted = () => {
-    setShowRoleSelection(true);
+    if (user) {
+      // User is already logged in, redirect to role selection
+      setShowRoleSelection(true);
+    } else {
+      // User not logged in, show signup modal
+      setAuthModalTab('signup');
+      setShowAuthModal(true);
+    }
   };
 
   const handleRoleSelect = (role: 'student' | 'alumni') => {
-    // In a real app, this would handle authentication first
-    if (role === 'student') {
-      navigate('/student-dashboard');
+    if (user) {
+      // User is already logged in, navigate directly
+      if (role === 'student') {
+        navigate('/student-dashboard');
+      } else {
+        navigate('/alumni-dashboard');
+      }
     } else {
-      navigate('/alumni-dashboard');
+      // This shouldn't happen as user should be logged in to reach role selection
+      setAuthModalTab('signup');
+      setShowAuthModal(true);
     }
   };
 
   const handleLogin = () => {
-    // Placeholder for login functionality
-    console.log('Login clicked');
+    setAuthModalTab('signin');
+    setShowAuthModal(true);
   };
 
   const handleSignup = () => {
-    setShowRoleSelection(true);
+    setAuthModalTab('signup');
+    setShowAuthModal(true);
   };
 
   return (
@@ -151,6 +181,12 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+        defaultTab={authModalTab}
+      />
     </div>
   );
 };

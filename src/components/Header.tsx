@@ -1,8 +1,12 @@
 
-import React from 'react';
-import { ThemeToggle } from './ThemeToggle';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Users, LogIn } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { AuthModal } from '@/components/auth/AuthModal';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { LogOut, User } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 interface HeaderProps {
   onLoginClick?: () => void;
@@ -10,40 +14,109 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onLoginClick, onSignupClick }) => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<'signin' | 'signup'>('signin');
+
+  const handleLoginClick = () => {
+    if (onLoginClick) {
+      onLoginClick();
+    } else {
+      setAuthModalTab('signin');
+      setShowAuthModal(true);
+    }
+  };
+
+  const handleSignupClick = () => {
+    if (onSignupClick) {
+      onSignupClick();
+    } else {
+      setAuthModalTab('signup');
+      setShowAuthModal(true);
+    }
+  };
+
+  const handleDashboardNavigation = () => {
+    if (user?.role === 'student') {
+      navigate('/student-dashboard');
+    } else if (user?.role === 'alumni') {
+      navigate('/alumni-dashboard');
+    } else if (user?.role === 'admin') {
+      navigate('/admin-dashboard');
+    }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
   return (
-    <header className="w-full border-b border-border/40 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <Users className="w-5 h-5 text-gray-soft" />
+    <>
+      <header className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div 
+              className="text-2xl font-bold text-gradient cursor-pointer" 
+              onClick={() => navigate('/')}
+            >
+              AlumniConnect
+            </div>
+            
+            <nav className="hidden md:flex space-x-8">
+              <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors">
+                Features
+              </a>
+              <a href="#how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">
+                How it Works
+              </a>
+              <a href="#about" className="text-foreground/70 hover:text-foreground transition-colors">
+                About
+              </a>
+            </nav>
+            
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                      <User className="h-4 w-4" />
+                      <span>{user.full_name || user.email}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleDashboardNavigation}>
+                      Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <>
+                  <Button variant="ghost" size="sm" onClick={handleLoginClick}>
+                    Login
+                  </Button>
+                  <Button size="sm" onClick={handleSignupClick}>
+                    Sign Up
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
-          <span className="text-xl font-bold text-gradient">AlumniConnect</span>
         </div>
-        
-        <nav className="hidden md:flex items-center space-x-6">
-          <a href="#features" className="text-foreground/80 hover:text-foreground transition-colors">Features</a>
-          <a href="#how-it-works" className="text-foreground/80 hover:text-foreground transition-colors">How it Works</a>
-          <a href="#about" className="text-foreground/80 hover:text-foreground transition-colors">About</a>
-        </nav>
-        
-        <div className="flex items-center space-x-3">
-          <ThemeToggle />
-          <Button 
-            variant="ghost" 
-            onClick={onLoginClick}
-            className="hidden sm:flex items-center space-x-2 hover:bg-blue-accent/10"
-          >
-            <LogIn className="w-4 h-4" />
-            <span>Login</span>
-          </Button>
-          <Button 
-            onClick={onSignupClick}
-            className="bg-blue-accent hover:bg-blue-accent/90 text-white"
-          >
-            Get Started
-          </Button>
-        </div>
-      </div>
-    </header>
+      </header>
+
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+        defaultTab={authModalTab}
+      />
+    </>
   );
 };

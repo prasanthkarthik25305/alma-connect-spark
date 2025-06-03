@@ -9,7 +9,333 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      alumni_profiles: {
+        Row: {
+          availability_for_mentorship: boolean | null
+          company: string | null
+          created_at: string | null
+          designation: string | null
+          domain: string | null
+          experience_years: number | null
+          id: string
+          linkedin_url: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          availability_for_mentorship?: boolean | null
+          company?: string | null
+          created_at?: string | null
+          designation?: string | null
+          domain?: string | null
+          experience_years?: number | null
+          id?: string
+          linkedin_url?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          availability_for_mentorship?: boolean | null
+          company?: string | null
+          created_at?: string | null
+          designation?: string | null
+          domain?: string | null
+          experience_years?: number | null
+          id?: string
+          linkedin_url?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alumni_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_postings: {
+        Row: {
+          company: string
+          description: string
+          domain: string | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          posted_at: string | null
+          posted_by: string | null
+          requirements: Json | null
+          salary_range: string | null
+          title: string
+        }
+        Insert: {
+          company: string
+          description: string
+          domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          posted_at?: string | null
+          posted_by?: string | null
+          requirements?: Json | null
+          salary_range?: string | null
+          title: string
+        }
+        Update: {
+          company?: string
+          description?: string
+          domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          posted_at?: string | null
+          posted_by?: string | null
+          requirements?: Json | null
+          salary_range?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_postings_posted_by_fkey"
+            columns: ["posted_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentorship_requests: {
+        Row: {
+          alumni_id: string | null
+          alumni_response: string | null
+          created_at: string | null
+          id: string
+          message: string | null
+          status: Database["public"]["Enums"]["mentorship_status"] | null
+          student_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          alumni_id?: string | null
+          alumni_response?: string | null
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          status?: Database["public"]["Enums"]["mentorship_status"] | null
+          student_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          alumni_id?: string | null
+          alumni_response?: string | null
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          status?: Database["public"]["Enums"]["mentorship_status"] | null
+          student_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentorship_requests_alumni_id_fkey"
+            columns: ["alumni_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentorship_requests_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          alumni_id: string | null
+          alumni_response: string | null
+          created_at: string | null
+          id: string
+          job_id: string | null
+          message: string | null
+          status: Database["public"]["Enums"]["referral_status"] | null
+          student_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          alumni_id?: string | null
+          alumni_response?: string | null
+          created_at?: string | null
+          id?: string
+          job_id?: string | null
+          message?: string | null
+          status?: Database["public"]["Enums"]["referral_status"] | null
+          student_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          alumni_id?: string | null
+          alumni_response?: string | null
+          created_at?: string | null
+          id?: string
+          job_id?: string | null
+          message?: string | null
+          status?: Database["public"]["Enums"]["referral_status"] | null
+          student_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_alumni_id_fkey"
+            columns: ["alumni_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_postings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_profiles: {
+        Row: {
+          certifications: Json | null
+          cgpa: number | null
+          created_at: string | null
+          id: string
+          interests: Json | null
+          placement_readiness_score: number | null
+          resume_url: string | null
+          skills: Json | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          certifications?: Json | null
+          cgpa?: number | null
+          created_at?: string | null
+          id?: string
+          interests?: Json | null
+          placement_readiness_score?: number | null
+          resume_url?: string | null
+          skills?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          certifications?: Json | null
+          cgpa?: number | null
+          created_at?: string | null
+          id?: string
+          interests?: Json | null
+          placement_readiness_score?: number | null
+          resume_url?: string | null
+          skills?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          admin_response: string | null
+          created_at: string | null
+          id: string
+          issue_description: string
+          status: Database["public"]["Enums"]["ticket_status"] | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          admin_response?: string | null
+          created_at?: string | null
+          id?: string
+          issue_description: string
+          status?: Database["public"]["Enums"]["ticket_status"] | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          admin_response?: string | null
+          created_at?: string | null
+          id?: string
+          issue_description?: string
+          status?: Database["public"]["Enums"]["ticket_status"] | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string | null
+          department: string | null
+          email: string
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          theme_preference:
+            | Database["public"]["Enums"]["theme_preference"]
+            | null
+        }
+        Insert: {
+          created_at?: string | null
+          department?: string | null
+          email: string
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          theme_preference?:
+            | Database["public"]["Enums"]["theme_preference"]
+            | null
+        }
+        Update: {
+          created_at?: string | null
+          department?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          theme_preference?:
+            | Database["public"]["Enums"]["theme_preference"]
+            | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +344,11 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      mentorship_status: "pending" | "accepted" | "rejected"
+      referral_status: "pending" | "accepted" | "rejected"
+      theme_preference: "light" | "dark"
+      ticket_status: "open" | "in_progress" | "resolved"
+      user_role: "student" | "alumni" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +463,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      mentorship_status: ["pending", "accepted", "rejected"],
+      referral_status: ["pending", "accepted", "rejected"],
+      theme_preference: ["light", "dark"],
+      ticket_status: ["open", "in_progress", "resolved"],
+      user_role: ["student", "alumni", "admin"],
+    },
   },
 } as const
