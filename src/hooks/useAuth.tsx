@@ -52,7 +52,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               department: userData.department
             });
           } else {
-            setUser(session.user);
+            // If we can't fetch user data, just set the basic user without role
+            setUser(session.user as AuthUser);
           }
         } else {
           setUser(null);
