@@ -1,92 +1,71 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Light mode colors using the specified palette */
+    --background: 199 41% 82%; /* #C7D2D9 - light gray */
+    --foreground: 222 93% 9%; /* #010326 - dark navy */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 199 41% 85%;
+    --card-foreground: 222 93% 9%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 199 41% 85%;
+    --popover-foreground: 222 93% 9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 198 57% 41%; /* #2D83A6 - accent blue */
+    --primary-foreground: 199 41% 82%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 79 82% 73%; /* #A1D929 - green secondary */
+    --secondary-foreground: 222 93% 9%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 199 41% 78%;
+    --muted-foreground: 222 47% 31%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 81 95% 59%; /* #B2F227 - bright green */
+    --accent-foreground: 222 93% 9%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 199 31% 75%;
+    --input: 199 31% 75%;
+    --ring: 198 57% 41%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark mode colors using the specified palette */
+    --background: 222 93% 9%; /* #010326 - dark navy */
+    --foreground: 199 41% 82%; /* #C7D2D9 - light gray */
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 222 93% 12%;
+    --card-foreground: 199 41% 82%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 93% 12%;
+    --popover-foreground: 199 41% 82%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 198 57% 41%; /* #2D83A6 - accent blue */
+    --primary-foreground: 199 41% 82%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 79 82% 73%; /* #A1D929 - green secondary */
+    --secondary-foreground: 222 93% 9%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 222 93% 15%;
+    --muted-foreground: 199 31% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 81 95% 59%; /* #B2F227 - bright green */
+    --accent-foreground: 222 93% 9%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 222 93% 15%;
+    --input: 222 93% 15%;
+    --ring: 198 57% 41%;
   }
 }
 
@@ -97,5 +76,27 @@
 
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #2D83A6, #B2F227);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #010326, #2D83A6);
+  }
+  
+  .bg-gradient-secondary {
+    background: linear-gradient(135deg, #B2F227, #A1D929);
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
   }
 }
