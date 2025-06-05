@@ -53,6 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             });
           } else {
             // If we can't fetch user data, just set the basic user without role
+            console.log('Error fetching user data:', error);
             setUser(session.user as AuthUser);
           }
         } else {
@@ -75,9 +76,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, userData: { role: UserRole; fullName: string; department?: string }) => {
     try {
+      console.log('Starting signup process for:', email);
       const redirectUrl = `${window.location.origin}/`;
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -85,40 +87,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           data: {
             role: userData.role,
             full_name: userData.fullName,
-            department: userData.department
+            department: userData.department || null
           }
         }
       });
 
       if (error) {
         console.error('Sign up error:', error);
+        toast({
+          title: "Signup Error",
+          description: error.message,
+          variant: "destructive",
+        });
         return { error };
       }
 
+      console.log('Signup successful:', data);
       toast({
         title: "Account created successfully!",
-        description: "Please check your email to verify your account.",
+        description: "Please check your email to verify your account, or you can start using the app right away.",
       });
 
       return { error: null };
     } catch (error) {
       console.error('Sign up error:', error);
+      toast({
+        title: "Signup Error",
+        description: "An unexpected error occurred during signup.",
+        variant: "destructive",
+      });
       return { error };
     }
   };
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log('Starting signin process for:', email);
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
         console.error('Sign in error:', error);
+        toast({
+          title: "Sign In Error",
+          description: error.message,
+          variant: "destructive",
+        });
         return { error };
       }
 
+      console.log('Signin successful:', data);
       toast({
         title: "Welcome back!",
         description: "You have successfully signed in.",
@@ -127,6 +147,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { error: null };
     } catch (error) {
       console.error('Sign in error:', error);
+      toast({
+        title: "Sign In Error",
+        description: "An unexpected error occurred during sign in.",
+        variant: "destructive",
+      });
       return { error };
     }
   };
