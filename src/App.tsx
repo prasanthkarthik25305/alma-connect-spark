@@ -10,6 +10,7 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import StudentDashboardPage from "./pages/StudentDashboardPage";
 import AlumniDashboardPage from "./pages/AlumniDashboardPage";
+import StudentProfilePage from "./pages/StudentProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,14 @@ const App = () => (
                 element={
                   <ProtectedRoute requiredRole="student">
                     <StudentDashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/student-profile" 
+                element={
+                  <ProtectedRoute requiredRole="student">
+                    <StudentProfilePage />
                   </ProtectedRoute>
                 } 
               />

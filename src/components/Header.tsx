@@ -47,6 +47,14 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick, onSignupClick }) =
     }
   };
 
+  const handleProfileNavigation = () => {
+    if (user?.role === 'student') {
+      navigate('/student-profile');
+    } else if (user?.role === 'alumni') {
+      navigate('/alumni-profile');
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
@@ -91,6 +99,11 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick, onSignupClick }) =
                     <DropdownMenuItem onClick={handleDashboardNavigation}>
                       Dashboard
                     </DropdownMenuItem>
+                    {(user.role === 'student' || user.role === 'alumni') && (
+                      <DropdownMenuItem onClick={handleProfileNavigation}>
+                        Profile
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem onClick={handleSignOut}>
                       <LogOut className="h-4 w-4 mr-2" />
                       Sign Out
