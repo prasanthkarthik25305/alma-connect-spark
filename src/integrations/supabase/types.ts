@@ -214,40 +214,58 @@ export type Database = {
       }
       student_profiles: {
         Row: {
+          address: string | null
           certifications: Json | null
           cgpa: number | null
           created_at: string | null
+          current_education: string | null
+          gender: string | null
           id: string
           interests: Json | null
           placement_readiness_score: number | null
+          profile_picture: string | null
           resume_url: string | null
+          roll_number: string | null
           skills: Json | null
           updated_at: string | null
           user_id: string | null
+          year: string | null
         }
         Insert: {
+          address?: string | null
           certifications?: Json | null
           cgpa?: number | null
           created_at?: string | null
+          current_education?: string | null
+          gender?: string | null
           id?: string
           interests?: Json | null
           placement_readiness_score?: number | null
+          profile_picture?: string | null
           resume_url?: string | null
+          roll_number?: string | null
           skills?: Json | null
           updated_at?: string | null
           user_id?: string | null
+          year?: string | null
         }
         Update: {
+          address?: string | null
           certifications?: Json | null
           cgpa?: number | null
           created_at?: string | null
+          current_education?: string | null
+          gender?: string | null
           id?: string
           interests?: Json | null
           placement_readiness_score?: number | null
+          profile_picture?: string | null
           resume_url?: string | null
+          roll_number?: string | null
           skills?: Json | null
           updated_at?: string | null
           user_id?: string | null
+          year?: string | null
         }
         Relationships: [
           {

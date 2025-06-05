@@ -65,8 +65,8 @@ export const StudentProfile: React.FC = () => {
           current_education: data.current_education,
           year: data.year,
           cgpa: data.cgpa,
-          skills: data.skills || [],
-          certifications: data.certifications || [],
+          skills: Array.isArray(data.skills) ? data.skills as string[] : [],
+          certifications: Array.isArray(data.certifications) ? data.certifications as Array<{name: string; provider: string; year: string}> : [],
           profile_picture: data.profile_picture
         });
       }
