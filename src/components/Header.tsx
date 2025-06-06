@@ -14,10 +14,12 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onLoginClick, onSignupClick }) => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading } = useAuth();
   const navigate = useNavigate();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<'signin' | 'signup'>('signin');
+
+  console.log('Header - User:', user?.id, 'Role:', user?.role, 'Loading:', loading);
 
   const handleLoginClick = () => {
     if (onLoginClick) {
@@ -38,12 +40,24 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick, onSignupClick }) =
   };
 
   const handleDashboardNavigation = () => {
-    if (user?.role === 'student') {
+    console.log('Dashboard navigation clicked for user role:', user?.role);
+    
+    if (!user?.role) {
+      console.log('No user role available, cannot navigate');
+      return;
+    }
+
+    if (user.role === 'student') {
+      console.log('Navigating to student dashboard');
       navigate('/student-dashboard');
-    } else if (user?.role === 'alumni') {
+    } else if (user.role === 'alumni') {
+      console.log('Navigating to alumni dashboard');
       navigate('/alumni-dashboard');
-    } else if (user?.role === 'admin') {
+    } else if (user.role === 'admin') {
+      console.log('Navigating to admin dashboard');
       navigate('/admin-dashboard');
+    } else {
+      console.log('Unknown role:', user.role);
     }
   };
 
@@ -93,6 +107,11 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick, onSignupClick }) =
                     <Button variant="outline" size="sm" className="flex items-center space-x-2">
                       <User className="h-4 w-4" />
                       <span>{user.full_name || user.email}</span>
+                      {user.role && (
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                          {user.role}
+                        </span>
+                      )}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">

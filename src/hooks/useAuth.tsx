@@ -29,49 +29,112 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      console.log('Fetching user profile for:', userId);
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('role, full_name, department, theme_preference')
+        .eq('id', userId)
+        .single();
+      
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        return null;
+      }
+      
+      console.log('User profile data:', userData);
+      return userData;
+    } catch (error) {
+      console.error('Exception fetching user profile:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
+    let mounted = true;
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
+        
+        if (!mounted) return;
+        
         setSession(session);
         
         if (session?.user) {
-          // Fetch user profile data from our users table
-          const { data: userData, error } = await supabase
-            .from('users')
-            .select('role, full_name, department, theme_preference')
-            .eq('id', session.user.id)
-            .single();
+          // Use setTimeout to avoid blocking the auth state change
+          setTimeout(async () => {
+            if (!mounted) return;
+            
+            const userData = await fetchUserProfile(session.user.id);
+            
+            if (mounted && userData) {
+              setUser({
+                ...session.user,
+                role: userData.role,
+                full_name: userData.full_name,
+                department: userData.department
+              });
+            } else if (mounted) {
+              // If we can't fetch user data, set basic user without role
+              console.log('Setting user without additional data');
+              setUser(session.user as AuthUser);
+            }
+            
+            if (mounted) {
+              setLoading(false);
+            }
+          }, 0);
+        } else {
+          setUser(null);
+          setLoading(false);
+        }
+      }
+    );
+
+    // Check for existing session
+    const initializeAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log('Initial session check:', session?.user?.id);
+        
+        if (!mounted) return;
+        
+        if (session?.user) {
+          setSession(session);
+          const userData = await fetchUserProfile(session.user.id);
           
-          if (!error && userData) {
+          if (mounted && userData) {
             setUser({
               ...session.user,
               role: userData.role,
               full_name: userData.full_name,
               department: userData.department
             });
-          } else {
-            // If we can't fetch user data, just set the basic user without role
-            console.log('Error fetching user data:', error);
+          } else if (mounted) {
             setUser(session.user as AuthUser);
           }
-        } else {
-          setUser(null);
         }
-        setLoading(false);
+        
+        if (mounted) {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        if (mounted) {
+          setLoading(false);
+        }
       }
-    );
+    };
 
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (!session) {
-        setLoading(false);
-      }
-    });
+    initializeAuth();
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = async (email: string, password: string, userData: { role: UserRole; fullName: string; department?: string }) => {
@@ -123,6 +186,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = async (email: string, password: string) => {
     try {
       console.log('Starting signin process for:', email);
+      setLoading(true);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -135,6 +200,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           description: error.message,
           variant: "destructive",
         });
+        setLoading(false);
         return { error };
       }
 
@@ -152,6 +218,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: "An unexpected error occurred during sign in.",
         variant: "destructive",
       });
+      setLoading(false);
       return { error };
     }
   };

@@ -59,6 +59,14 @@ const App = () => (
                   </ProtectedRoute>
                 } 
               />
+              <Route 
+                path="/admin-dashboard" 
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AdminDashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
