@@ -12,37 +12,64 @@ export type Database = {
       alumni_profiles: {
         Row: {
           availability_for_mentorship: boolean | null
+          certifications: Json | null
           company: string | null
           created_at: string | null
           designation: string | null
           domain: string | null
+          education_summary: string | null
           experience_years: number | null
+          graduation_year: string | null
           id: string
           linkedin_url: string | null
+          location: string | null
+          profile_picture: string | null
+          resume_url: string | null
+          roll_number: string | null
+          skills: Json | null
+          success_story: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
           availability_for_mentorship?: boolean | null
+          certifications?: Json | null
           company?: string | null
           created_at?: string | null
           designation?: string | null
           domain?: string | null
+          education_summary?: string | null
           experience_years?: number | null
+          graduation_year?: string | null
           id?: string
           linkedin_url?: string | null
+          location?: string | null
+          profile_picture?: string | null
+          resume_url?: string | null
+          roll_number?: string | null
+          skills?: Json | null
+          success_story?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
           availability_for_mentorship?: boolean | null
+          certifications?: Json | null
           company?: string | null
           created_at?: string | null
           designation?: string | null
           domain?: string | null
+          education_summary?: string | null
           experience_years?: number | null
+          graduation_year?: string | null
           id?: string
           linkedin_url?: string | null
+          location?: string | null
+          profile_picture?: string | null
+          resume_url?: string | null
+          roll_number?: string | null
+          skills?: Json | null
+          success_story?: string | null
           updated_at?: string | null
           user_id?: string | null
         }

@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import StudentDashboardPage from "./pages/StudentDashboardPage";
 import AlumniDashboardPage from "./pages/AlumniDashboardPage";
 import StudentProfilePage from "./pages/StudentProfilePage";
+import AlumniProfilePage from "./pages/AlumniProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,14 @@ const App = () => (
                 element={
                   <ProtectedRoute requiredRole="alumni">
                     <AlumniDashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/alumni-profile" 
+                element={
+                  <ProtectedRoute requiredRole="alumni">
+                    <AlumniProfilePage />
                   </ProtectedRoute>
                 } 
               />
