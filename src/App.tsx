@@ -12,6 +12,7 @@ import StudentDashboardPage from "./pages/StudentDashboardPage";
 import AlumniDashboardPage from "./pages/AlumniDashboardPage";
 import StudentProfilePage from "./pages/StudentProfilePage";
 import AlumniProfilePage from "./pages/AlumniProfilePage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

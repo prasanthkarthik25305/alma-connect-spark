@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_analytics: {
+        Row: {
+          created_at: string | null
+          date_recorded: string | null
+          id: string
+          metric_name: string
+          metric_value: number
+        }
+        Insert: {
+          created_at?: string | null
+          date_recorded?: string | null
+          id?: string
+          metric_name: string
+          metric_value: number
+        }
+        Update: {
+          created_at?: string | null
+          date_recorded?: string | null
+          id?: string
+          metric_name?: string
+          metric_value?: number
+        }
+        Relationships: []
+      }
+      admin_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          setting_key: string
+          setting_value: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       alumni_profiles: {
         Row: {
           availability_for_mentorship: boolean | null
@@ -175,6 +223,60 @@ export type Database = {
           {
             foreignKeyName: "mentorship_requests_student_id_fkey"
             columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profile_approval_requests: {
+        Row: {
+          admin_notes: string | null
+          current_data: Json | null
+          id: string
+          request_type: string
+          requested_at: string | null
+          requested_data: Json
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          current_data?: Json | null
+          id?: string
+          request_type: string
+          requested_at?: string | null
+          requested_data: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          current_data?: Json | null
+          id?: string
+          request_type?: string
+          requested_at?: string | null
+          requested_data?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_approval_requests_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profile_approval_requests_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
