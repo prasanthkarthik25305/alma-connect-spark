@@ -34,12 +34,19 @@ export const AdminAnalytics = () => {
         return acc;
       }, {} as Record<string, number>);
 
-      // Skills analysis
-      const allSkills = [...students, ...alumni].flatMap(profile => 
-        Array.isArray(profile.skills) ? profile.skills : []
-      );
+      // Skills analysis - properly handle JSON arrays
+      const allSkills = [...students, ...alumni].flatMap(profile => {
+        const skills = profile.skills;
+        if (Array.isArray(skills)) {
+          return skills.filter(skill => typeof skill === 'string');
+        }
+        return [];
+      });
+      
       const skillsCount = allSkills.reduce((acc, skill) => {
-        acc[skill] = (acc[skill] || 0) + 1;
+        if (typeof skill === 'string') {
+          acc[skill] = (acc[skill] || 0) + 1;
+        }
         return acc;
       }, {} as Record<string, number>);
 

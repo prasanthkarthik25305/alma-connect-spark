@@ -11,9 +11,11 @@ import {
   Settings 
 } from 'lucide-react';
 
+type AdminSection = 'dashboard' | 'students' | 'alumni' | 'profiles' | 'requests' | 'analytics' | 'settings';
+
 interface AdminSidebarProps {
-  activeSection: string;
-  onSectionChange: (section: string) => void;
+  activeSection: AdminSection;
+  onSectionChange: (section: AdminSection) => void;
 }
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ 
@@ -21,13 +23,13 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   onSectionChange 
 }) => {
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'students', label: 'Manage Students', icon: Users },
-    { id: 'alumni', label: 'Manage Alumni', icon: GraduationCap },
-    { id: 'profiles', label: 'View Profiles', icon: UserCheck },
-    { id: 'requests', label: 'Requests & Approvals', icon: FileCheck },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'dashboard' as AdminSection, label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'students' as AdminSection, label: 'Manage Students', icon: Users },
+    { id: 'alumni' as AdminSection, label: 'Manage Alumni', icon: GraduationCap },
+    { id: 'profiles' as AdminSection, label: 'View Profiles', icon: UserCheck },
+    { id: 'requests' as AdminSection, label: 'Requests & Approvals', icon: FileCheck },
+    { id: 'analytics' as AdminSection, label: 'Analytics', icon: BarChart3 },
+    { id: 'settings' as AdminSection, label: 'Settings', icon: Settings },
   ];
 
   return (

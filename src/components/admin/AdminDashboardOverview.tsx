@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, GraduationCap, FileCheck, TrendingUp } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export const AdminDashboardOverview = () => {
   const { data: stats, isLoading } = useQuery({
