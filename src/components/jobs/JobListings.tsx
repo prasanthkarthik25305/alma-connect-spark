@@ -15,7 +15,7 @@ interface Job {
   description: string;
   location: string | null;
   salary_range: string | null;
-  requirements: string[];
+  requirements: any; // Changed from string[] to any to handle Json type
   success_rate: number | null;
   posted_at: string;
   posted_by: string;
@@ -80,6 +80,20 @@ export const JobListings: React.FC = () => {
     );
   }
 
+  // Helper function to safely parse requirements
+  const parseRequirements = (requirements: any): string[] => {
+    if (Array.isArray(requirements)) return requirements;
+    if (typeof requirements === 'string') {
+      try {
+        const parsed = JSON.parse(requirements);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -88,72 +102,76 @@ export const JobListings: React.FC = () => {
       </div>
 
       <div className="space-y-4">
-        {jobs.map((job) => (
-          <Card key={job.id} className="hover:shadow-md transition-shadow">
-            <CardHeader className="pb-4">
-              <div className="flex items-start justify-between">
-                <div>
-                  <CardTitle className="text-xl mb-1">{job.title}</CardTitle>
-                  <p className="text-lg font-semibold text-primary">{job.company}</p>
-                </div>
-                {job.success_rate && (
-                  <Badge variant="outline" className="flex items-center gap-1">
-                    <TrendingUp className="h-3 w-3" />
-                    {job.success_rate}% success
-                  </Badge>
-                )}
-              </div>
-            </CardHeader>
-
-            <CardContent className="space-y-4">
-              <p className="text-muted-foreground">{job.description}</p>
-
-              {job.requirements && job.requirements.length > 0 && (
-                <div>
-                  <h4 className="font-medium mb-2">Required Skills:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {job.requirements.map((skill, index) => (
-                      <Badge key={index} variant="secondary">
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <Separator />
-
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                {job.location && (
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    {job.location}
-                  </div>
-                )}
-                {job.salary_range && (
-                  <div className="flex items-center gap-1">
-                    <DollarSign className="h-4 w-4" />
-                    {job.salary_range}
-                  </div>
-                )}
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  Posted {format(new Date(job.posted_at), 'MMM dd, yyyy')}
-                </div>
-                {job.poster && (
+        {jobs.map((job) => {
+          const requirements = parseRequirements(job.requirements);
+          
+          return (
+            <Card key={job.id} className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-4">
+                <div className="flex items-start justify-between">
                   <div>
-                    Posted by {job.poster.full_name} ({job.poster.role})
+                    <CardTitle className="text-xl mb-1">{job.title}</CardTitle>
+                    <p className="text-lg font-semibold text-primary">{job.company}</p>
+                  </div>
+                  {job.success_rate && (
+                    <Badge variant="outline" className="flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3" />
+                      {job.success_rate}% success
+                    </Badge>
+                  )}
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">{job.description}</p>
+
+                {requirements.length > 0 && (
+                  <div>
+                    <h4 className="font-medium mb-2">Required Skills:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {requirements.map((skill, index) => (
+                        <Badge key={index} variant="secondary">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </div>
 
-              <div className="flex gap-2 pt-2">
-                <Button className="flex-1">Apply Now</Button>
-                <Button variant="outline">Learn More</Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                <Separator />
+
+                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                  {job.location && (
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      {job.location}
+                    </div>
+                  )}
+                  {job.salary_range && (
+                    <div className="flex items-center gap-1">
+                      <DollarSign className="h-4 w-4" />
+                      {job.salary_range}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    Posted {format(new Date(job.posted_at), 'MMM dd, yyyy')}
+                  </div>
+                  {job.poster && (
+                    <div>
+                      Posted by {job.poster.full_name} ({job.poster.role})
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <Button className="flex-1">Apply Now</Button>
+                  <Button variant="outline">Learn More</Button>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

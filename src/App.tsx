@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,63 +18,65 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route 
-                path="/student-dashboard" 
-                element={
-                  <ProtectedRoute requiredRole="student">
-                    <StudentDashboardPage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/student-profile" 
-                element={
-                  <ProtectedRoute requiredRole="student">
-                    <StudentProfilePage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/alumni-dashboard" 
-                element={
-                  <ProtectedRoute requiredRole="alumni">
-                    <AlumniDashboardPage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/alumni-profile" 
-                element={
-                  <ProtectedRoute requiredRole="alumni">
-                    <AlumniProfilePage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/admin-dashboard" 
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <AdminDashboardPage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
-);
+const App: React.FC = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route 
+                  path="/student-dashboard" 
+                  element={
+                    <ProtectedRoute requiredRole="student">
+                      <StudentDashboardPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/student-profile" 
+                  element={
+                    <ProtectedRoute requiredRole="student">
+                      <StudentProfilePage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/alumni-dashboard" 
+                  element={
+                    <ProtectedRoute requiredRole="alumni">
+                      <AlumniDashboardPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/alumni-profile" 
+                  element={
+                    <ProtectedRoute requiredRole="alumni">
+                      <AlumniProfilePage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-dashboard" 
+                  element={
+                    <ProtectedRoute requiredRole="admin">
+                      <AdminDashboardPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
