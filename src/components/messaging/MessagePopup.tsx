@@ -129,7 +129,8 @@ export const MessagePopup: React.FC<MessagePopupProps> = ({
     }
   }, [isOpen, isMinimized]);
 
-  if (!recipientId) return null;
+  // Don't show message popup for admin users
+  if (!recipientId || !user || user.role === 'admin') return null;
 
   return (
     <>

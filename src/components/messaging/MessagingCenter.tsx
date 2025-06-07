@@ -36,6 +36,13 @@ export const MessagingCenter: React.FC = () => {
   const fetchUsers = async () => {
     if (!user) return;
 
+    // Only show messaging for students and alumni, not admins
+    if (user.role === 'admin') {
+      console.log('Messaging not available for admin users');
+      setLoading(false);
+      return;
+    }
+
     try {
       let query = supabase
         .from('users')
@@ -43,12 +50,9 @@ export const MessagingCenter: React.FC = () => {
         .neq('id', user.id);
 
       // Filter based on user role
-      if (user.role === 'admin') {
-        // Admin can message anyone
-        query = query.in('role', ['student', 'alumni']);
-      } else if (user.role === 'student') {
-        // Students can message admins
-        query = query.eq('role', 'admin');
+      if (user.role === 'student') {
+        // Students can message admins and alumni
+        query = query.in('role', ['admin', 'alumni']);
       } else if (user.role === 'alumni') {
         // Alumni can message admins and students
         query = query.in('role', ['admin', 'student']);
@@ -117,6 +121,21 @@ export const MessagingCenter: React.FC = () => {
   useEffect(() => {
     fetchUsers();
   }, [user]);
+
+  // Don't show messaging for admin users
+  if (user?.role === 'admin') {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center">
+          <div className="text-muted-foreground">
+            <MessageCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>Messaging is not available for admin users.</p>
+            <p className="text-sm mt-2">Students and alumni can message you directly.</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (loading) {
     return (
