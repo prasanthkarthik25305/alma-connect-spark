@@ -8,10 +8,12 @@ import {
   UserCheck, 
   FileCheck, 
   BarChart3, 
-  Settings 
+  Settings,
+  MessageCircle,
+  Briefcase
 } from 'lucide-react';
 
-type AdminSection = 'dashboard' | 'students' | 'alumni' | 'profiles' | 'requests' | 'analytics' | 'settings';
+type AdminSection = 'dashboard' | 'students' | 'alumni' | 'profiles' | 'requests' | 'analytics' | 'settings' | 'messages' | 'jobs';
 
 interface AdminSidebarProps {
   activeSection: AdminSection;
@@ -28,6 +30,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     { id: 'alumni' as AdminSection, label: 'Manage Alumni', icon: GraduationCap },
     { id: 'profiles' as AdminSection, label: 'View Profiles', icon: UserCheck },
     { id: 'requests' as AdminSection, label: 'Requests & Approvals', icon: FileCheck },
+    { id: 'messages' as AdminSection, label: 'Messages', icon: MessageCircle },
+    { id: 'jobs' as AdminSection, label: 'Job Management', icon: Briefcase },
     { id: 'analytics' as AdminSection, label: 'Analytics', icon: BarChart3 },
     { id: 'settings' as AdminSection, label: 'Settings', icon: Settings },
   ];

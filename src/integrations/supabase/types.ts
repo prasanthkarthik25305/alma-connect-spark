@@ -143,6 +143,7 @@ export type Database = {
           posted_by: string | null
           requirements: Json | null
           salary_range: string | null
+          success_rate: number | null
           title: string
         }
         Insert: {
@@ -156,6 +157,7 @@ export type Database = {
           posted_by?: string | null
           requirements?: Json | null
           salary_range?: string | null
+          success_rate?: number | null
           title: string
         }
         Update: {
@@ -169,6 +171,7 @@ export type Database = {
           posted_by?: string | null
           requirements?: Json | null
           salary_range?: string | null
+          success_rate?: number | null
           title?: string
         }
         Relationships: [
@@ -223,6 +226,51 @@ export type Database = {
           {
             foreignKeyName: "mentorship_requests_student_id_fkey"
             columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          recipient_id: string
+          sender_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          recipient_id: string
+          sender_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          recipient_id?: string
+          sender_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]

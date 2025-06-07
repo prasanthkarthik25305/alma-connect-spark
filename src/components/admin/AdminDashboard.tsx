@@ -8,8 +8,10 @@ import { AdminViewProfiles } from './AdminViewProfiles';
 import { AdminRequests } from './AdminRequests';
 import { AdminAnalytics } from './AdminAnalytics';
 import { AdminSettings } from './AdminSettings';
+import { AdminMessages } from './AdminMessages';
+import { AdminPostJob } from './AdminPostJob';
 
-type AdminSection = 'dashboard' | 'students' | 'alumni' | 'profiles' | 'requests' | 'analytics' | 'settings';
+type AdminSection = 'dashboard' | 'students' | 'alumni' | 'profiles' | 'requests' | 'analytics' | 'settings' | 'messages' | 'jobs';
 
 export const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState<AdminSection>('dashboard');
@@ -26,6 +28,10 @@ export const AdminDashboard = () => {
         return <AdminViewProfiles />;
       case 'requests':
         return <AdminRequests />;
+      case 'messages':
+        return <AdminMessages />;
+      case 'jobs':
+        return <AdminPostJob />;
       case 'analytics':
         return <AdminAnalytics />;
       case 'settings':
